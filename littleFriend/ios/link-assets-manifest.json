@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/models/Sphere_001_baked_DIFFUSE.jpg",
+      "sha1": "2178c0f42d9e3a6bb4de40559c68b8b17799f2ce"
+    },
+    {
+      "path": "assets/models/Sphere_baked_DIFFUSE.jpg",
+      "sha1": "4d5bdd8da2f577b4e7de4ecfb5de618a1fd411ba"
+    },
+    {
+      "path": "assets/models/littlefriend10.glb",
+      "sha1": "eb0667d59af4032430c4869ea50c18ba0aca28b7"
+    }
+  ]
+}

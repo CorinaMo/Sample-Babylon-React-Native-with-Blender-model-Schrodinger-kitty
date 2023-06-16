@@ -1,0 +1,7 @@
+{
+  "name": "littleFriend",
+  "displayName": "littleFriend",
+  "packagerOpts": {
+    "config": "metro.config.js"
+  }
+}
