@@ -4,6 +4,8 @@ Sample Babylon React Native with Blender model (bundle in app /assets): Schrödi
 
 ![screenshots](/littleFriend/README_pics/screenshotsbabylon.jpg)
 
+- When install npm packages include this: --peer-dependencies.
+
 - Debug Android apk in release section.
 - React Native bare app with Expo modules & Expo Assets to access the assets as URIs (local URIs).
 - Node main version: 18
