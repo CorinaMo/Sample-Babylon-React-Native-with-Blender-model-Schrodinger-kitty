@@ -11,4 +11,5 @@ Sample Babylon React Native with Blender model (bundle in app /assets): Schrödi
 - Node main version: 18
 
 ## Versions
+- **v 2.0.0** => "take a photo" and "share" functionalities added in AR mode.
 - **v 1.0.0** => Just viewers: Normal default viewer + AR mode.
