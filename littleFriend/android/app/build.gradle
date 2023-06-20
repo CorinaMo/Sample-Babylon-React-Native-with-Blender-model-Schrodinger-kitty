@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
 
@@ -99,7 +100,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "2.0.0"
     }
 
     splits {
