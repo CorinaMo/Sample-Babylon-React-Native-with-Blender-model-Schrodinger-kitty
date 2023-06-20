@@ -1,6 +1,6 @@
 {
   "name": "littlefriend",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -15,6 +15,7 @@
     "@babylonjs/materials": "^6.6.1",
     "@babylonjs/react-native": "^1.6.1",
     "@babylonjs/react-native-iosandroid-0-71": "^1.6.1",
+    "@react-native-camera-roll/camera-roll": "^5.6.0",
     "@react-native-community/cli": "^11.3.2",
     "expo": "^48.0.19",
     "expo-asset": "^8.9.1",
@@ -23,7 +24,11 @@
     "react-native": "^0.71.8",
     "react-native-asset": "^2.1.1",
     "react-native-eject": "^0.2.0",
-    "react-native-permissions": "^3.8.0"
+    "react-native-orientation-locker": "^1.5.0",
+    "react-native-permissions": "^3.8.0",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-view-shot": "^3.6.0",
+    "expo-sharing": "~11.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

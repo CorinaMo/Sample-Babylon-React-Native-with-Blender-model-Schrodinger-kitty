@@ -22,7 +22,7 @@ module.exports = ( async () => {
       }),
     },
     resolver: {
-      assetExts: [...assetExts, 'gltf', 'glb', 'babylon'],
+      assetExts: [...assetExts, 'gltf', 'glb', 'svg'],
     },
   };
 })();
