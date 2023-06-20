@@ -210,7 +210,7 @@ const EngineScreen = props => {
                     </View>
                 }
                 <View collapsable={false} style={{ flex: 1 }}>
-                    <EngineView camera={camera} />
+                    <EngineView camera={camera} displayFrameRate={false} />
                 </View>
                 <View
                     style={{
