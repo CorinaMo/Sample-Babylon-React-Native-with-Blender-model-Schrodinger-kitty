@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, ToastAndroid, ActivityIndicator, Dimensions, TouchableHighlight, Text, useWindowDimensions } from 'react-native';
+import { View, ToastAndroid, ActivityIndicator, TouchableHighlight, Text, useWindowDimensions } from 'react-native';
 import { EngineView, useEngine } from '@babylonjs/react-native';
 import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/materials";
 import { Scene } from '@babylonjs/core/scene';
 import { Asset } from 'expo-asset';
-import my_model from "../assets/models/littlefriend10.glb";
+import my_model from "../assets/models/littlefriendMixamo2.glb";
 import { WebXRSessionManager } from '@babylonjs/core/XR';
 import { Vector3 } from '@babylonjs/core';
 import { captureScreen } from 'react-native-view-shot';
@@ -35,14 +35,15 @@ const EngineScreen = props => {
     async function exitAR() {
         Orientation?.lockToPortrait();
         if (kitty) {
-            kitty.position = new Vector3(0, 0, 0);
-            kitty.rotate(new Vector3(0, 1, 0), Math.PI);
+            kitty.position = new Vector3(100, 0, 0);
+            //kitty.rotate(new Vector3(0, 1, 0), Math.PI);
         }
-        await xrSession?.exitXRAsync();
         setTrackingState(undefined);
         setXrSession(undefined);
+        if (scene?.activeCamera?.position) {
+            scene.activeCamera.position.z = 30;
+        }
         console.log('Out of AR mode');
-        setPortalOn(false);
     }
 
     // HANDLING AR MODE 
@@ -64,8 +65,7 @@ const EngineScreen = props => {
                         console.log('Default experience created ...');
 
                         // positioning my model 
-                        kitty.position = new Vector3(0, -2, 15);
-                        kitty.rotate(new Vector3(0, 1, 0), Math.PI);
+                        kitty.position = new Vector3(5, -2, 20);
 
                         // Unlocking screen Orientation | If a photo is taken will need to know the Orientation
                         Orientation?.unlockAllOrientations();
@@ -77,32 +77,38 @@ const EngineScreen = props => {
                             xr?.renderTarget
                         )
                         //console.log('xrSession: ', xrSession_);
-                        
-                        // Listeners
-                        setTrackingState(xr?.baseExperience?.camera?.trackingState);
 
+                        setTrackingState(xr?.baseExperience?.camera?.trackingState);
+                        setXrSession(xrSession_);
+
+                        // Listeners
+                      
                         xr?.baseExperience?.camera?.onTrackingStateChanged.add(
                             newTrackingState => {
                                 setTrackingState(newTrackingState);
-                            },
+                            }
                         );
-
                         xrSession?.onXRSessionEnded.add(async () => { await exitAR() });
-                        setXrSession(xrSession_);
                     }
                 }
             } else {
-                await exitAR();
+                if (xrSession) {
+                    await xrSession?.exitXRAsync().catch(error => console.log(error));
+                    await exitAR();
+                }
             }
         } catch (error) {
             ToastAndroid.show('Ups! Something went wrong: ' + error, 3000);
-            await exitAR();
+            if (xrSession) {
+                await xrSession?.exitXRAsync().catch(error => console.log(error));
+                await exitAR();
+            }
         }
     };
 
     // CAMERA - TAKE A PHOTO IN AR MODE AND SAVE IT IN THE ANDROID GALLERY
     async function takeAPic() {
-        console.log('Taking pic... ', Dimensions.get('screen'));
+        // Hide buttons to do the screen shot.
         hideElements = true;
         setHideElements(hideElements);
         setTimeout(() => { }, 600);
@@ -118,18 +124,17 @@ const EngineScreen = props => {
 
             // Access to gallery and save the picture in the LittleFriend album folder
             // if the folder is not there it creates it.
-            let toGallery = await CameraRoll.save(uri, { album: 'LittleFriend' });
-            // console.log('toGallery: ', toGallery);
+            await CameraRoll.save(uri, { album: 'LittleFriend' });
 
             // We set the current picture info for the PortalPhoto component
             let imgPage = await CameraRoll?.getPhotos({ first: 1, group_name: 'LittleFriend', include: ['imageSize'] });
             tempPhoto = imgPage.edges[0]?.node?.image;
             settempPhoto(tempPhoto);
-
             setPortalOn(true);
 
         } catch (error) {
             console.log('error: ', error);
+            return;
         }
     }
 
@@ -143,26 +148,29 @@ const EngineScreen = props => {
             console.log('Setting scene: ');
             scene = new Scene(engine);
 
-            console.log("Adding camera...");
-            scene?.createDefaultCameraOrLight(true, true, true);
-            (scene?.activeCamera).alpha += Math.PI;
-            (scene?.activeCamera).radius = 25;
-
             console.log('Importing mesh... ');
 
             // const fast_test_model = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF/BoxAnimated.gltf';
             const meshLoad = await SceneLoader?.ImportMeshAsync("", localUri, "", scene);
-            console.log('Meshload loaded ');
-
-            setCamera(scene?.activeCamera);
             if (!meshLoad) {
                 return;
             }
-            kitty = meshLoad?.meshes[0] || null;
+            console.log('Meshes imported ');
+
+            let mesh = meshLoad?.meshes[0];
+            mesh.position = new Vector3(100, 0, 0);
+            mesh.rotate(new Vector3(0, 1, 0), Math.PI);
+
+            console.log("Adding camera...");
+            scene.createDefaultCameraOrLight(true, true, true);
+            scene.activeCamera.position.z = 30;
+            setCamera(scene?.activeCamera);
+            kitty = mesh;
             setKitty(kitty);
-            setScene(scene);
+            
             onSession = true;
             setOnSession(onSession);
+            setScene(scene);
             console.log('Scene created!');
             isLoading = false;
             setIsLoading(isLoading);
@@ -193,7 +201,8 @@ const EngineScreen = props => {
                 {
                     isLoading && (
                         <View style={{ flex: 1, width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center', position: 'absolute', backgroundColor: '#000000', zIndex: 2 }} >
-                            <ActivityIndicator size={128} color='#00ff00' />
+                            <ActivityIndicator size={128} color='#ffffff' />
+                            <Text style={{ fontFamily: 'Roboto-Light', fontSize: 18, color: '#ffffff', textAlign: 'center', marginTop: 16 }} >Wait, loading quantum kitty...</Text>
                         </View>
                     )
                 }
