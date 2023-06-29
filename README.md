@@ -2,7 +2,7 @@
 
 Sample Babylon React Native with Blender model (bundle in app /assets): Schrödinger kitty based on the finger toy from [The Unemployed Philosophers Guild](https://philosophersguild.com/).
 
-![screenshots](/README_pics/screenshotsbabylon3.gif)
+![screenshots](/littleFriend/README_pics/screenshotsbabylon2.jpg)
 
 - When install npm packages include this: --peer-dependencies.
 
